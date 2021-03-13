@@ -1,0 +1,41 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: regionalpd-storageclass
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-standard
+  replication-type: regional-pd
+#volumeBindingMode: WaitForFirstConsumer
+allowedTopologies:
+- matchLabelExpressions:
+  - key: topology.gke.io/zone
+    values:
+    - europe-west1-b
+    - europe-west1-c
+#---
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: pv-demo
+#spec:
+#  storageClassName: "regionalpd-storageclass"
+#  capacity:
+#     storage: 200Gi
+#  accessModes:
+#     - ReadWriteOnce
+#  claimRef:
+#    namespace: default
+#    name: pv-claim-demo
+#  csi:
+#    driver: pd.csi.storage.gke.io
+#    volumeHandle: projects/production-304119/regions/europe-west1/disks/gce-disk-1
+#  nodeAffinity:
+#    required:
+#      nodeSelectorTerms:
+#        - matchExpressions:
+#          - key: topology.gke.io/zone
+#            operator: In
+#            values:
+#               - europe-west1-b
+#               - europe-west1-c
